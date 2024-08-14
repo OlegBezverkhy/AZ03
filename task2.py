@@ -11,7 +11,7 @@ def main():
     print(array_first)
     print('Второй массив')
     print(array_second)
-    # Строим гистограмму:
+    # Строим диагармму рассеяния:
     plt.figure(figsize=(10, 6))
     plt.scatter(array_first, array_second, color='blue', marker='*')
     plt.xlabel('ось X')
