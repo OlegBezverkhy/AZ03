@@ -12,6 +12,7 @@ URL = 'https://www.divan.ru/volgograd/category/divany-i-kresla'
 OUTPUT_FILE = 'output_price.csv'
 SLEEP_TIME = 3
 
+
 def check_browser_and_launch():
     ''' Определяет установленный браузер. Если это не Chrome или Firefox, то
     сообщает об ошибке'''
@@ -45,8 +46,8 @@ def check_browser_and_launch():
 
 
 def clean(price):
-    ''' Очищает данные переданные в переменной price от пробелов и выражения "руб."
-    преобразует в целочисленный тип '''
+    ''' Очищает данные переданные в переменной price от
+    пробелов и выражения "руб."преобразует в целочисленный тип '''
     return int(price.replace('руб.', '').replace(' ', ''))
 
 
@@ -56,23 +57,28 @@ def histogramma(data):
     plt.title(f'Гистограмма цен диванов c сайта:  {URL}')
     plt.xlabel('Цена дивана в руб.')
     plt.ylabel('Частота')
-    plt.text(0, -1, f'Среднее значение цен {mean(data):.1f} руб.')
+    plt.text(0, -1, f'Среднее значение цен: {mean(data):.1f} руб.',
+             color='red')
     plt.hist(data, bins=20, edgecolor='white')
     plt.show()
 
 
 def main():
-    print('Программа работает только с браузерами Chrome или Firefox. Проверьте их наличие')
+    print('Программа работает только с браузерами Chrome или Firefox. '
+          'Проверьте их наличие')
     browser = check_browser_and_launch()
     browser.get(URL)
     sleep(SLEEP_TIME)
 
     #Парсинг цен и очистка данных
-    prices = browser.find_elements(By.XPATH, '//div[@class="pY3d2"]//span[@data-testid="price"]')
+    prices = browser.find_elements(By.XPATH,
+                                   '//div[@class="pY3d2"]//'
+                                   'span[@data-testid="price"]')
     clean_prices = [clean(price.text) for price in prices]
 
     # Записываем очищенные даннные в файл
-    with open(OUTPUT_FILE, mode='w', newline='', encoding='utf-8') as file:
+    with open(OUTPUT_FILE, mode='w', newline='', encoding='utf-8') \
+            as file:
         writer = csv.writer(file)
         # Записываем заголовок столбца
         writer.writerow(['Price'])
@@ -88,4 +94,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
