@@ -1,6 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 from os import path
+from numpy import mean
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
@@ -49,12 +50,13 @@ def clean(price):
     return int(price.replace('руб.', '').replace(' ', ''))
 
 
-def histograma(data):
+def histogramma(data):
     ''' Построоение диаграмм'''
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 7))
     plt.title(f'Гистограмма цен диванов c сайта:  {URL}')
-    plt.xlabel('Цена дивана')
+    plt.xlabel('Цена дивана в руб.')
     plt.ylabel('Частота')
+    plt.text(0, -1, f'Среднее значение цен {mean(data):.1f} руб.')
     plt.hist(data, bins=20, edgecolor='white')
     plt.show()
 
@@ -79,7 +81,7 @@ def main():
     print(f'Данные сохранены в файл {OUTPUT_FILE}')
 
     # Построение гистограммы
-    histograma(clean_prices)
+    histogramma(clean_prices)
 
     # Закрытие драйвера
     browser.quit()
